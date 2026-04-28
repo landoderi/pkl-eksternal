@@ -65,3 +65,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 Route::delete('/admin/berita/{id}', [BeritaController::class, 'destroy'])->name('berita.destroy');
 
 Route::get('/berita/{id}', [App\Http\Controllers\HomeController::class, 'detailBerita'])->name('berita.detail');
+
+use App\Http\Controllers\LoginController;
+
+Route::get('auth/google', [LoginController::class, 'redirectToGoogle'])->name('google.login');
+Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallback']);

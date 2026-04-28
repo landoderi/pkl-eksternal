@@ -2,7 +2,13 @@
 
 @section('content')
 <div class="p-10">
-    <h1 class="text-3xl font-black uppercase tracking-tighter mb-8">Kelola Berita</h1>
+    <div class="flex justify-between items-center mb-10">
+        <div>
+            <h1 class="text-3xl font-black uppercase tracking-tighter text-zinc-800">Kelola Berita</h1>
+            <p class="text-xs text-gray-400 font-bold uppercase tracking-widest">Tasty Food Management</p>
+        </div>
+        <a href="{{ route('berita') }}" class="text-sm font-bold text-gray-500 hover:text-black transition">← Kembali ke Berita</a>
+    </div>
 
     {{-- Form Tambah --}}
     <form action="{{ route('berita.store') }}" method="POST" enctype="multipart/form-data" class="bg-white p-8 rounded-[30px] border mb-10">

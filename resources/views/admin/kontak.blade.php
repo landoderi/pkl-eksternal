@@ -9,15 +9,13 @@
     <div class="flex-1 p-10">
         
         {{-- HEADER (Sama dengan Dashboard) --}}
-        <div class="flex justify-between items-center mb-10">
-            <div>
-                <h1 class="text-3xl font-extrabold uppercase">Pesan Masuk</h1>
-                <p class="text-gray-500">Daftar pesan dari pelanggan Tasty Food</p>
-            </div>
-           
-                <a href="{{ route('kontak') }}" class="text-sm font-bold text-gray-500 hover:text-black transition">← Kembali ke Kontak</a>
+ <div class="flex justify-between items-center mb-10">
+        <div>
+            <h1 class="text-3xl font-black uppercase tracking-tighter text-zinc-800">Kelola Kontak</h1>
+            <p class="text-xs text-gray-400 font-bold uppercase tracking-widest">Tasty Food Management</p>
         </div>
-
+        <a href="{{ route('kontak') }}" class="text-sm font-bold text-gray-500 hover:text-black transition">← Kembali ke Kontak</a>
+    </div>
         {{-- STATS KECIL (Opsional, biar makin mirip) --}}
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
             <div class="bg-white p-6 rounded-[25px] shadow-sm border-l-8 border-yellow-500">
@@ -69,13 +67,6 @@
                     </tbody>
                 </table>
             </div>
-        </div>
-
-        {{-- BUTTON BACK KE DASHBOARD --}}
-        <div class="mt-8">
-            <a href="/admin/dashboard" class="text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-black transition">
-                &larr; Kembali ke Dashboard
-            </a>
         </div>
     </div>
 </div>

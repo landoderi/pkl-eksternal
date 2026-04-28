@@ -43,6 +43,12 @@
                     Login
                 </button>
             </div>
+            <div class="mt-4">
+    <a href="{{ route('google.login') }}" class="w-full flex items-center justify-center gap-3 py-3 px-4 border-2 border-gray-200 rounded-xl font-bold text-sm hover:bg-gray-50 transition-all">
+        <img src="https://www.svgrepo.com/show/355037/google.svg" class="w-5 h-5">
+        Login dengan Google
+    </a>
+</div>
         </form>
         <p class="text-center text-sm text-gray-600">
             Belum punya akun? <a href="{{ route('register') }}" class="font-bold text-black border-b-2 border-black">Daftar sekarang</a>
