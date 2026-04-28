@@ -1,0 +1,45 @@
+@extends('layouts.app')
+
+@section('content')
+<div class="p-10">
+    <h1 class="text-3xl font-black uppercase tracking-tighter mb-8">Kelola Berita</h1>
+
+    {{-- Form Tambah --}}
+    <form action="{{ route('berita.store') }}" method="POST" enctype="multipart/form-data" class="bg-white p-8 rounded-[30px] border mb-10">
+        @csrf
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <input type="text" name="judul" placeholder="Judul Berita" class="border p-4 rounded-xl w-full">
+            <input type="file" name="gambar" class="border p-4 rounded-xl w-full">
+        </div>
+        <textarea name="isi" placeholder="Isi berita..." class="border p-4 rounded-xl w-full mt-4 h-32"></textarea>
+        <button type="submit" class="bg-black text-white px-10 py-3 mt-4 rounded-full font-bold uppercase text-xs">Simpan Berita</button>
+    </form>
+
+    {{-- Tabel List Berita --}}
+    <div class="bg-white rounded-[30px] border overflow-hidden">
+        <table class="w-full text-left border-collapse">
+            <thead class="bg-gray-50 border-b">
+                <tr>
+                    <th class="p-6">Gambar</th>
+                    <th class="p-6">Judul</th>
+                    <th class="p-6">Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($beritas as $b)
+                <tr class="border-b">
+                    <td class="p-6"><img src="{{ asset('storage/berita/'.$b->gambar) }}" class="w-20 h-20 object-cover rounded-xl"></td>
+                    <td class="p-6 font-bold">{{ $b->judul }}</td>
+                    <td class="p-6">
+                        <form action="{{ route('berita.destroy', $b->id) }}" method="POST">
+                            @method('DELETE') @csrf
+                            <button class="text-red-600 font-bold uppercase text-xs">Hapus</button>
+                        </form>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
+@endsection
