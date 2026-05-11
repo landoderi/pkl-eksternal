@@ -13,7 +13,10 @@ class LoginController extends Controller
     // Fungsi untuk lempar ke Google
     public function redirectToGoogle()
     {
-        return Socialite::driver('google')->redirect();
+       // Tambahkan ->with(['prompt' => 'select_account'])
+    return Socialite::driver('google')
+        ->with(['prompt' => 'select_account'])
+        ->redirect();
     }
 
     // Fungsi tangkap data dari Google
@@ -40,7 +43,7 @@ public function handleGoogleCallback()
 
     } catch (\Exception $e) {
         // Ini kuncinya! Biar kita tau kenapa gagal simpan
-        return dd($e->getMessage()); 
+        return redirect()->route('login')->with('error', 'Ada masalah: ' . $e->getMessage());
     }
 }
 }

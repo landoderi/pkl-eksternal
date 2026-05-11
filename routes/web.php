@@ -5,36 +5,42 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\GaleriController;
 use App\Http\Controllers\ContactController;
-use App\Models\Galeri;
-// Tambahkan ini di bagian paling atas file web.php
 use App\Http\Controllers\BeritaController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LoginController;
+use App\Models\Galeri;
 
 // --- HALAMAN PUBLIK ---
 Route::get('/', function () { return view('welcome'); });
-// Ganti yang lama jadi ini:
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/about', function () { return view('about'); })->name('about');
 Route::get('/berita', [BeritaController::class, 'indexPublik'])->name('berita');
+Route::get('/berita/{id}', [HomeController::class, 'detailBerita'])->name('berita.detail');
 
-// PERBAIKAN DI SINI: Tambahkan ->name('galeri')
+// routes/web.php
+
 Route::get('/galeri', function () {
-    $galeris = Galeri::all(); 
-    return view('galeri', compact('galeris')); 
+    // Pastikan nama variabel di sini 'galeries'
+    $galeries = \App\Models\Galeri::all(); 
+    
+    // Pastikan di compact juga tertulis 'galeries'
+    return view('galeri', compact('galeries')); 
 })->name('galeri');
 
-// PERBAIKAN DI SINI: Tambahkan ->name('kontak')
 Route::get('/kontak', function () { 
     return view('kontak'); 
 })->name('kontak');
 
-// --- AUTH (LOGIN & REGISTER) ---
+// --- AUTH & GOOGLE ---
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('auth/google', [LoginController::class, 'redirectToGoogle'])->name('google.login');
+Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallback']);
 
-// --- SIMPAN PESAN KONTAK (PUBLIC) ---
+// --- SIMPAN PESAN KONTAK (DARI USER) ---
 Route::post('/contact/send', [ContactController::class, 'store'])->name('contact.store');
 
 // --- HALAMAN TERPROTEKSI (ADMIN) ---
@@ -43,30 +49,17 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     // Dashboard
     Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     
-    // Kontak Admin
+    // Kontak Admin (Lihat & Hapus Pesan)
     Route::get('/kontak', [ContactController::class, 'index'])->name('admin.kontak');
+    Route::delete('/kontak/{id}', [ContactController::class, 'destroy'])->name('admin.kontak.destroy'); // PINDAH KE SINI BIAR AMAN!
     
     // Galeri Admin
     Route::get('/galeri', [GaleriController::class, 'index'])->name('admin.galeri');
     Route::post('/galeri', [GaleriController::class, 'store'])->name('admin.galeri.store');
     Route::delete('/galeri/{id}', [GaleriController::class, 'destroy'])->name('admin.galeri.destroy');
     
-});
-
-Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
-    // ... route yang sudah ada ...
-
-    // Route Resource Berita (Otomatis handle Index, Create, Store, Edit, Update, Destroy)
+    // Berita Admin (Otomatis handle Index, Create, Store, Edit, Update, Destroy)
     Route::resource('berita', BeritaController::class)->names([
         'index' => 'admin.berita',
     ]);
 });
-
-Route::delete('/admin/berita/{id}', [BeritaController::class, 'destroy'])->name('berita.destroy');
-
-Route::get('/berita/{id}', [App\Http\Controllers\HomeController::class, 'detailBerita'])->name('berita.detail');
-
-use App\Http\Controllers\LoginController;
-
-Route::get('auth/google', [LoginController::class, 'redirectToGoogle'])->name('google.login');
-Route::get('auth/google/callback', [LoginController::class, 'handleGoogleCallback']);

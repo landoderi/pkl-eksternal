@@ -24,33 +24,33 @@ class GaleriController extends Controller
             'foto' => 'required|image|mimes:jpeg,png,jpg',
         ]);
 
-if($request->hasFile('foto')){
+if($request->hasFile('foto')){  
     $file = $request->file('foto');
     // Hilangkan spasi dan tambahkan timestamp
     $nama_file = time() . "_" . str_replace(' ', '_', $file->getClientOriginalName());
     $file->storeAs('galeri', $nama_file, 'public');
     
     // Simpan ke database
-    Galeri::create([
-        'foto' => $nama_file,
-        'judul' => $request->judul
-    ]);
+Galeri::create([
+    'foto' => $nama_file, // Di DB cuma nyimpen "12345_foto.jpg"
+    'judul' => $request->judul
+]);
 }
 
         return back()->with('success', 'Foto berhasil ditambahkan!');
     }
 
     // Fungsi untuk hapus foto (Destroy)
-    public function destroy($id)
-    {
-        $galeri = Galeri::findOrFail($id);
-        
-        // Hapus file fisik di folder public/images
-        if (file_exists(public_path('images/' . $galeri->foto))) {
-            unlink(public_path('images/' . $galeri->foto));
-        }
-
-        $galeri->delete();
-        return back()->with('success', 'Foto berhasil dihapus!');
+public function destroy($id)
+{
+    $galeri = Galeri::findOrFail($id);
+    
+    // Ganti ini! Karena kamu nyimpennya di storage/public/galeri, bukan di public/images
+    if (\Storage::disk('public')->exists('galeri/' . $galeri->foto)) {
+        \Storage::disk('public')->delete('galeri/' . $galeri->foto);
     }
+
+    $galeri->delete();
+    return back()->with('success', 'Foto berhasil dihapus!');
+}
 }

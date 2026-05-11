@@ -6,32 +6,52 @@
     <title>Tasty Food - Healthy Tasty Food</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script defer src="https://unpkg.com/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
-        body { font-family: 'Montserrat', sans-serif !important; }
+        body { 
+            font-family: 'Montserrat', sans-serif !important; 
+            overflow-x: hidden; 
+        }
+        [x-cloak] { display: none !important; }
     </style>
 </head>
 <body class="bg-white text-gray-800">
 
-    {{-- 1. NAVBAR: Hanya muncul di halaman depan, BUKAN login/register/admin --}}
+    {{-- NAVBAR USER --}}
     @if(!Route::is('login') && !Route::is('register') && !Request::is('admin*'))
         @include('layouts.navbar')
     @endif
 
-    <div class="flex">
-        {{-- 2. SIDEBAR: Hanya muncul jika URL-nya ada kata 'admin' --}}
+    {{-- WRAPPER UTAMA --}}
+    <div class="{{ Request::is('admin*') ? 'flex min-h-screen' : '' }}">
+        
+        {{-- SIDEBAR ADMIN (Hanya 1 kali panggil) --}}
         @if(Request::is('admin*'))
-            @include('layouts.sidebar_admin') {{-- Buat file ini di layouts/sidebar_admin.blade.php --}}
+            @include('layouts.sidebar_admin') 
         @endif
 
-        {{-- 3. CONTENT --}}
-        <main class="flex-1 {{ Request::is('admin*') ? 'md:ml-64' : '' }}">
+        {{-- AREA KONTEN UTAMA (Hanya 1 kali panggil) --}}
+        <main class="flex-1 min-w-0">
             @yield('content')
         </main>
-    </div>
 
+    </div> {{-- Penutup Wrapper Utama --}}
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init({
+        once: true, 
+        duration: 1000,
+        easing: 'ease-out-back',
+      });
+    </script>
 </body>
 </html>

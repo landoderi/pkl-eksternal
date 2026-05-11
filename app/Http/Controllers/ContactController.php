@@ -7,36 +7,45 @@ use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
-public function store(Request $request)
-{
-    // Validasi data input
-    $validated = $request->validate([
-        'subject' => 'required|string|max:255',
-        'name'    => 'required|string|max:255',
-        'email'   => 'required|email',
-        'message' => 'required',
-    ]);
+    // 1. Fungsi Simpan Pesan (Dari halaman depan)
+    public function store(Request $request)
+    {
+        // CEK LOGIN DULU: Pindahkan ke paling atas biar gak kerja dua kali
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'Anda harus login untuk mengirim pesan.');
+        }
 
-    // Simpan data yang sudah divalidasi
-    Contact::create($validated);
+        // Validasi data input
+        $validated = $request->validate([
+            'subject' => 'required|string|max:255',
+            'name'    => 'required|string|max:255',
+            'email'   => 'required|email',
+            'message' => 'required',
+        ]);
 
-    return back()->with('success', 'Pesan berhasil dikirim!');
+        // Simpan data
+        Contact::create($validated);
 
-    // Cek manual jika user belum login
-    if (!auth()->check()) {
-        return redirect()->route('login')->with('error', 'Anda harus login untuk mengirim pesan.');
+        // Langsung return ke halaman sebelumnya
+        return back()->with('success', 'Pesan Anda berhasil terkirim!');
     }
 
-    // Lanjutkan proses simpan data jika sudah login
-    // Contact::create([...]);
-
-    return redirect()->back()->with('success', 'Pesan Anda berhasil terkirim!');
-}
-
-    // Ini buat nampilin di dashboard admin
+    // 2. Fungsi Nampilin di Dashboard Admin
     public function index()
     {
+        // Ambil data terbaru
         $contacts = Contact::latest()->get();
+        
+        // Pastikan path view-nya benar (admin.kontak atau admin.kontak.index?)
         return view('admin.kontak', compact('contacts'));
+    }
+
+    // 3. Tambahan: Fungsi Hapus (Biar admin bisa beresin pesan lama)
+    public function destroy(int $id)
+    {
+        $contact = Contact::findOrFail($id);
+        $contact->delete();
+
+        return back()->with('success', 'Pesan berhasil dihapus!');
     }
 }

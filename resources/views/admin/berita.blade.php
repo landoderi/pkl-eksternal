@@ -1,14 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="p-10">
-    <div class="flex justify-between items-center mb-10">
-        <div>
-            <h1 class="text-3xl font-black uppercase tracking-tighter text-zinc-800">Kelola Berita</h1>
-            <p class="text-xs text-gray-400 font-bold uppercase tracking-widest">Tasty Food Management</p>
+<div class="w-full min-h-screen bg-gray-100 pb-24 md:pb-10" style="font-family: 'Montserrat', sans-serif;">
+    <div class="p-4 md:p-10">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 md:mb-10">
+            <div>
+                <h1 class="text-3xl md:text-4xl font-black uppercase tracking-tighter text-zinc-800">Kelola Berita</h1>
+                <p class="text-[10px] md:text-xs text-gray-400 font-bold uppercase tracking-widest">Tasty Food Management</p>
+            </div>
+            {{-- Tombol Home disembunyikan di mobile karena sudah ada di navigasi bawah --}}
+            <a href="{{ route('berita') }}" class="hidden md:block text-sm font-bold text-gray-500 hover:text-black transition">← Kembali ke Berita</a>
         </div>
-        <a href="{{ route('berita') }}" class="text-sm font-bold text-gray-500 hover:text-black transition">← Kembali ke Berita</a>
-    </div>
 
     {{-- Form Tambah --}}
     <form action="{{ route('berita.store') }}" method="POST" enctype="multipart/form-data" class="bg-white p-8 rounded-[30px] border mb-10">
@@ -47,5 +49,6 @@
             </tbody>
         </table>
     </div>
+    <div/>
 </div>
 @endsection
