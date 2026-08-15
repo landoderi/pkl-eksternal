@@ -36,29 +36,46 @@
 
 {{-- 2. SECTION CARDS --}}
 {{-- 2. SECTION CARDS --}}
+{{-- 2. SECTION CARDS --}}
 <section class="relative py-16 md:py-24 bg-cover bg-center bg-no-repeat" style="background-image: url('{{ asset('images/Group 70.png') }}')">
-    {{-- Overlay tipis biar background tetep dapet feel-nya --}}
     <div class="absolute inset-0 bg-black/5 backdrop-blur-[1px]"></div>
 
     <div class="container mx-auto px-6 md:px-10 relative z-10">
         
-        {{-- INI VARIABELNYA JANGAN SAMPE HILANG WOK --}}
         @php
             $cards = [
-                ['img' => 'img-1.png', 'title' => 'LOREM IPSUM', 'delay' => '0'],
-                ['img' => 'img-2.png', 'title' => 'LOREM IPSUM', 'delay' => '200'],
-                ['img' => 'img-3.png', 'title' => 'LOREM IPSUM', 'delay' => '400'],
-                ['img' => 'img-4.png', 'title' => 'LOREM IPSUM', 'delay' => '600'],
+                [
+                    'img' => 'img-1.png', 
+                    'title' => 'HEALTHY FOOD', 
+                    'desc' => 'Nikmati hidangan sehat dengan bahan organik pilihan terbaik setiap hari.',
+                    'delay' => '0'
+                ],
+                [
+                    'img' => 'img-2.png', 
+                    'title' => 'FRESH INGREDIENTS', 
+                    'desc' => 'Semua bahan masakan kami ambil langsung dari petani lokal yang terpercaya.',
+                    'delay' => '200'
+                ],
+                [
+                    'img' => 'img-3.png', 
+                    'title' => 'EXPERT CHEF', 
+                    'desc' => 'Dimasak oleh koki berpengalaman untuk menjamin cita rasa yang autentik.',
+                    'delay' => '400'
+                ],
+                [
+                    'img' => 'img-4.png', 
+                    'title' => 'TASTY RECIPE', 
+                    'desc' => 'Resep turun temurun yang dikemas dengan sentuhan modern yang unik.',
+                    'delay' => '600'
+                ],
             ];
         @endphp
 
-        {{-- Grid 2 kolom di mobile biar ramping & background kelihatan --}}
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-12">
             @foreach($cards as $card)
             <div class="bg-white/90 backdrop-blur-sm p-5 md:p-10 rounded-2xl md:rounded-3xl text-center shadow-xl relative mt-12 md:mt-0 transition-transform hover:-translate-y-2 duration-300"
                  data-aos="fade-up" data-aos-delay="{{ $card['delay'] }}">
                 
-                {{-- Lingkaran gambar mungil buat mobile --}}
                 <div class="absolute -top-10 md:-top-14 left-1/2 transform -translate-x-1/2">
                     <div class="p-1.5 bg-white rounded-full shadow-md">
                         <img src="{{ asset('images/' . $card['img']) }}" 
@@ -69,8 +86,10 @@
                 <h4 class="mt-8 md:mt-14 font-black uppercase mb-2 md:mb-4 tracking-wider text-gray-800 text-[10px] md:text-sm">
                     {{ $card['title'] }}
                 </h4>
+                
+                {{-- PERBAIKAN: Memanggil variabel desc agar teks tidak sama semua --}}
                 <p class="text-[9px] md:text-sm text-gray-500 leading-tight md:leading-relaxed">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    {{ $card['desc'] }}
                 </p>
             </div>
             @endforeach
@@ -120,13 +139,17 @@
 </section>
 
 {{-- 4. GALERI KAMI --}}
-<section class="py-20 px-10 md:px-20 text-center bg-white">
+<section class="py-20 px-6 md:px-20 text-center bg-white">
     <h3 class="text-2xl font-bold uppercase mb-12 tracking-widest" data-aos="fade-up">Galeri Kami</h3>
     
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-        @foreach($galeris as $index => $gl)
-            <div class="rounded-xl overflow-hidden shadow-md h-80 group" 
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6 mb-12">
+        {{-- Kita ambil maksimal 6 foto saja --}}
+        @foreach($galeris->take(6) as $index => $gl)
+            <div class="rounded-xl overflow-hidden shadow-md h-40 md:h-80 group 
+                        {{-- TRICK: Foto ke-5 dan ke-6 disembunyikan di mobile (hidden), muncul di desktop (md:block) --}}
+                        @if($index >= 4) hidden md:block @endif" 
                  data-aos="zoom-in" data-aos-delay="{{ $index * 100 }}">
+                
                 <img src="{{ asset('storage/galeri/' . $gl->foto) }}" 
                      class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
                      onerror="this.src='{{ asset('images/no-image.png') }}'">
@@ -136,7 +159,7 @@
 
     <div data-aos="fade-up">
         <a href="{{ route('galeri') }}">
-            <button class="bg-black text-white px-16 py-3 uppercase text-sm font-bold tracking-widest hover:bg-gray-800 transition-all hover:px-20">
+            <button class="bg-black text-white px-10 md:px-16 py-3 uppercase text-sm font-bold tracking-widest hover:bg-gray-800 transition-all hover:px-20">
                 Lihat Lebih Banyak
             </button>
         </a>

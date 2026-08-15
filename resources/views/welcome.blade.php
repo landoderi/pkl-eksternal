@@ -72,31 +72,32 @@
             
             {{-- Tombol dengan efek Shine (btn-primary) --}}
 {{-- Ganti bg-yellow-500 jadi bg-black dan hover:bg-yellow-600 jadi hover:bg-gray-800 --}}
-<a href="/home" class="btn-primary group relative px-16 py-4 bg-black text-white font-bold uppercase text-xs tracking-[0.2em] shadow-2xl hover:scale-105 hover:bg-gray-800 active:scale-95 transition-all">
-    Explore Menu
-</a>
-            
-@guest
-    <a href="/login" class="px-12 py-4 border-2 border-white font-bold uppercase text-xs tracking-[0.2em] hover:bg-white hover:text-black transition-all">
-        Login
+{{-- Tombol Explore Menu --}}
+    <a href="/home" class="btn-primary group relative w-64 py-4 bg-black text-white font-bold uppercase text-xs tracking-[0.2em] shadow-2xl hover:scale-105 hover:bg-gray-800 active:scale-95 transition-all text-center">
+        Explore Menu
     </a>
-@else
-    {{-- Cek apakah user yang login punya role 'admin' --}}
-@if(auth()->user()->role == 'admin')
-    {{-- Ganti border-yellow-500 dan text-yellow-500 jadi black --}}
-    <a href="/admin/dashboard" class="px-12 py-4 border-2 border-black text-black font-bold uppercase text-xs tracking-[0.2em] hover:bg-black hover:text-white transition-all">
-        Dashboard
-    </a>
-@endif
-    
-    {{-- Tombol Logout (Opsional, tapi bagus biar user bisa keluar) --}}
-    <form action="{{ route('logout') }}" method="POST" class="inline">
-        @csrf
-        <button type="submit" class="px-12 py-4 border-2 border-red-500 text-red-500 font-bold uppercase text-xs tracking-[0.2em] hover:bg-red-500 hover:text-white transition-all">
-            Logout
-        </button>
-    </form>
-@endguest
+                
+    @guest
+        {{-- Tombol Login: Menambahkan w-64 dan text-center agar sama --}}
+        <a href="/login" class="w-64 py-4 border-2 border-white font-bold uppercase text-xs tracking-[0.2em] hover:bg-white hover:text-black transition-all text-center">
+            Login
+        </a>
+    @else
+        @if(auth()->user()->role == 'admin')
+            {{-- Tombol Dashboard: Menambahkan w-64 --}}
+            <a href="/admin/dashboard" class="w-64 py-4 border-2 border-black text-white font-bold uppercase text-xs tracking-[0.2em] hover:bg-black hover:text-white transition-all text-center">
+                Dashboard
+            </a>
+        @endif
+        
+        {{-- Tombol Logout: Menambahkan w-64 --}}
+        <form action="{{ route('logout') }}" method="POST" class="inline">
+            @csrf
+            <button type="submit" class="w-64 py-4 border-2 border-red-500 text-white font-bold uppercase text-xs tracking-[0.2em] hover:bg-red-500 hover:text-white transition-all text-center">
+                Logout
+            </button>
+        </form>
+    @endguest
         </div>
     </div>
 
